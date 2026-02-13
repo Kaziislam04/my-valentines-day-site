@@ -1,142 +1,538 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Be My Valentine 💖</title>
-<style>
-    body {
-        margin: 0;
-        overflow: hidden;
-        font-family: 'Arial', sans-serif;
-        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        text-align: center;
-    }
-
-    h1 {
-        color: white;
-        font-size: 3em;
-        text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-        animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-        100% { transform: scale(1); }
-    }
-
-    .container {
-        position: relative;
-        z-index: 2;
-    }
-
-    button {
-        padding: 15px 30px;
-        font-size: 1.2em;
-        border: none;
-        border-radius: 30px;
-        cursor: pointer;
-        margin: 20px;
-        transition: all 0.3s ease;
-    }
-
-    #yesBtn {
-        background-color: #ff4d6d;
-        color: white;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-
-    #yesBtn:hover {
-        background-color: #ff1e4d;
-        transform: scale(1.1);
-    }
-
-    #noBtn {
-        background-color: white;
-        color: #ff4d6d;
-        position: absolute;
-    }
-
-    /* Balloons */
-    .balloon {
-        position: absolute;
-        bottom: -150px;
-        width: 60px;
-        height: 80px;
-        background-color: red;
-        border-radius: 50%;
-        animation: float 10s linear infinite;
-    }
-
-    .balloon:after {
-        content: '';
-        position: absolute;
-        width: 2px;
-        height: 50px;
-        background: #555;
-        top: 80px;
-        left: 50%;
-    }
-
-    @keyframes float {
-        0% {
-            transform: translateY(0);
-            opacity: 1;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>moving buttons · valentine fun</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
-        100% {
-            transform: translateY(-120vh);
-            opacity: 0;
-        }
-    }
 
-</style>
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #ffdde1 0%, #f9c9d1 80%);
+            font-family: 'Segoe UI', 'Cursive', 'Brush Script MT', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 1rem;
+        }
+
+        /* floating balloons container */
+        .balloon-world {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;     /* so buttons are still clickable through balloons */
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 60px;
+            height: 80px;
+            background-color: #ff8a9c;
+            border-radius: 50% 50% 40% 40%;
+            box-shadow: inset -5px -10px 10px rgba(0,0,0,0.05), 2px 8px 15px rgba(198, 40, 80, 0.3);
+            animation: floatUp 14s linear infinite;
+            transform-origin: center;
+            pointer-events: none;
+        }
+
+        .balloon::after {
+            content: "";
+            position: absolute;
+            bottom: -12px;
+            left: 28px;
+            width: 2px;
+            height: 40px;
+            background-color: #a05a5a;
+            border-left: 1px dashed #b06f6f;
+            transform: rotate(5deg);
+        }
+
+        .balloon::before {
+            content: "❤️";
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 22px;
+            color: #ffecf0;
+            text-shadow: 0 0 3px #ff1a4c;
+            opacity: 0.7;
+            z-index: 2;
+        }
+
+        /* different colors and sizes */
+        .balloon:nth-child(1) { left: 10%; width: 65px; height: 85px; background: #ffb3c6; animation-duration: 16s; animation-delay: 0s; }
+        .balloon:nth-child(2) { left: 25%; width: 55px; height: 75px; background: #ffd7b0; animation-duration: 12s; animation-delay: 3s; }
+        .balloon:nth-child(3) { left: 40%; width: 70px; height: 92px; background: #f4acb7; animation-duration: 19s; animation-delay: 1s; }
+        .balloon:nth-child(4) { left: 60%; width: 50px; height: 68px; background: #d9b8ff; animation-duration: 11s; animation-delay: 5s; }
+        .balloon:nth-child(5) { left: 75%; width: 75px; height: 96px; background: #a7e0ff; animation-duration: 18s; animation-delay: 2s; }
+        .balloon:nth-child(6) { left: 85%; width: 60px; height: 80px; background: #ffc2d1; animation-duration: 14s; animation-delay: 7s; }
+        .balloon:nth-child(7) { left: 95%; width: 45px; height: 62px; background: #fbafaf; animation-duration: 17s; animation-delay: 4s; }
+        .balloon:nth-child(8) { left: 5%; width: 80px; height: 102px; background: #fed0bb; animation-duration: 20s; animation-delay: 9s; }
+        .balloon:nth-child(9) { left: 20%; width: 62px; height: 82px; background: #fbc0cb; animation-duration: 13s; animation-delay: 2.5s; }
+        .balloon:nth-child(10) { left: 50%; width: 72px; height: 90px; background: #ffe5b4; animation-duration: 15s; animation-delay: 6s; }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(2deg);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translateY(-55vh) rotate(-2deg) scale(1.05);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-110vh) rotate(3deg);
+                opacity: 0.3;
+            }
+        }
+
+        /* main card – valentine box */
+        .valentine-box {
+            position: relative;
+            z-index: 20;
+            max-width: 650px;
+            width: 100%;
+            background: rgba(255, 240, 245, 0.75);
+            backdrop-filter: blur(7px);
+            border-radius: 60px 60px 40px 40px;
+            padding: 2rem 2rem 3rem;
+            box-shadow: 0 25px 40px rgba(200, 80, 120, 0.35),
+                        0 0 0 6px #fff8,
+                        inset 0 -5px 10px #ffeef2;
+            border: 2px solid white;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-family: 'Brush Script MT', cursive, 'Segoe UI', sans-serif;
+            color: #d43f62;
+            text-shadow: 3px 3px 0 #ffd9e2, 6px 6px 10px rgba(180, 40, 70, 0.2);
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+            line-height: 1.1;
+        }
+
+        .sub {
+            font-size: 1.8rem;
+            font-family: cursive;
+            color: #b34165;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px dashed #ffa5b9;
+            padding-bottom: 0.8rem;
+            display: inline-block;
+        }
+
+        .button-panel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            margin: 3rem 0 2rem;
+            position: relative;
+            min-height: 130px;
+        }
+
+        /* both buttons base style */
+        .btn {
+            padding: 1.2rem 2.6rem;
+            font-size: 2rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 60px;
+            box-shadow: 0 10px 0 #aa2e4e, 0 6px 18px #ffa5b9, 0 10px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.1s ease;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            letter-spacing: 1px;
+            background: #ff5f7c;
+            color: white;
+            text-shadow: 0 2px 0 #a1304b;
+            position: relative;
+            min-width: 200px;
+            transform: rotate(0deg);
+            border: 2px solid #fff9;
+        }
+
+        /* second button (NO) special style – evil pink but movable */
+        .btn-no {
+            background: #c94762;
+            box-shadow: 0 8px 0 #78283e, 0 6px 18px #c45a73;
+            font-size: 2.2rem;
+            padding: 1.2rem 2.4rem;
+        }
+
+        /* heart decorations */
+        .heart-deco {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 4px 4px #eea5b5);
+            margin: 0 5px;
+        }
+
+        /* the moving button will be absolutely shifted inside the panel */
+        .moving-btn {
+            transition: transform 0.2s ease-out, left 0.2s ease-out, top 0.2s ease-out;
+            will-change: transform;
+        }
+
+        /* sweet message after clicking yes */
+        .response-message {
+            font-size: 2.2rem;
+            color: #ad2055;
+            background: #fff0f3da;
+            border-radius: 60px;
+            padding: 1.2rem 2rem;
+            margin-top: 2rem;
+            border: 2px solid white;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 5px 0 #ef8e9f;
+            font-family: cursive;
+            display: none;
+        }
+
+        .response-message.show {
+            display: block;
+        }
+
+        .footer-note {
+            margin-top: 2rem;
+            font-size: 1.3rem;
+            color: #ad3b5c;
+            opacity: 0.8;
+        }
+
+        /* little hearts float around */
+        .tiny-hearts {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .tiny-hearts span {
+            position: absolute;
+            color: #ff99aa;
+            font-size: 1.8rem;
+            animation: twinkle 4s infinite alternate;
+            opacity: 0.5;
+            transform: scale(1);
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 0.9; transform: scale(1.2); }
+        }
+
+        .tiny-hearts span:nth-child(1) { top: 15%; left: 8%; animation-duration: 3s; }
+        .tiny-hearts span:nth-child(2) { top: 70%; left: 92%; animation-duration: 5s; }
+        .tiny-hearts span:nth-child(3) { top: 85%; left: 15%; animation-duration: 4.2s; }
+        .tiny-hearts span:nth-child(4) { top: 10%; left: 88%; animation-duration: 3.8s; }
+        .tiny-hearts span:nth-child(5) { top: 45%; left: 5%; animation-duration: 5.5s; }
+
+        /* responsive */
+        @media (max-width: 550px) {
+            h1 { font-size: 3rem; }
+            .btn { font-size: 1.8rem; padding: 0.8rem 1.8rem; min-width: 150px; }
+            .button-panel { gap: 1.5rem; }
+        }
+    </style>
 </head>
 <body>
+    <!-- floating balloons background (pointer-events none) -->
+    <div class="balloon-world">
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+        <div class="balloon"></div>
+    </div>
 
-<div class="container">
-    <h1>Will You Be My Valentine? 💘</h1>
-    <button id="yesBtn" onclick="yesClicked()">Yes 💖</button>
-    <button id="noBtn">No 😢</button>
-</div>
+    <!-- tiny decorative floating hearts -->
+    <div class="tiny-hearts">
+        <span>❤️</span>
+        <span>❤️</span>
+        <span>❤️</span>
+        <span>❤️</span>
+        <span>❤️</span>
+    </div>
 
-<script>
-    const noBtn = document.getElementById("noBtn");
+    <main class="valentine-box">
+        <h1>
+            <span class="heart-deco">❤️</span> 
+            Be my Valentine?
+            <span class="heart-deco">❤️</span>
+        </h1>
+        <div class="sub">you make my heart float like balloons</div>
 
-    noBtn.addEventListener("mouseover", () => {
-        const x = Math.random() * (window.innerWidth - 100);
-        const y = Math.random() * (window.innerHeight - 50);
-        noBtn.style.left = x + "px";
-        noBtn.style.top = y + "px";
-    });
+        <!-- Button panel that contains YES and the tricky NO -->
+        <div class="button-panel" id="buttonPanel">
+            <!-- YES button (static, always clickable) -->
+            <button class="btn" id="yesBtn">YES! 💖</button>
 
-    function yesClicked() {
-        document.body.innerHTML = `
-            <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:linear-gradient(135deg,#ff4d6d,#ff9a9e);color:white;font-size:3em;text-align:center;">
-                Yay!!! 💕🥰<br>Best Valentine Ever! 💖🎉
-            </div>
-        `;
-    }
+            <!-- NO button – the movable one (starts normal, then runs away) -->
+            <button class="btn btn-no moving-btn" id="noBtn">NO 💔</button>
+        </div>
 
-    // Create balloons
-    function createBalloon() {
-        const balloon = document.createElement("div");
-        balloon.classList.add("balloon");
-        balloon.style.left = Math.random() * window.innerWidth + "px";
-        balloon.style.backgroundColor = ["#ff4d6d", "#ff758f", "#ff8fa3", "#ffb3c6"][Math.floor(Math.random()*4)];
-        balloon.style.animationDuration = (6 + Math.random() * 5) + "s";
-        document.body.appendChild(balloon);
+        <!-- hidden sweet message appears when YES is clicked -->
+        <div id="responseMessage" class="response-message">
+            💞 yay! i knew it! 💞<br> happy valentine's day!
+        </div>
 
-        setTimeout(() => {
-            balloon.remove();
-        }, 10000);
-    }
+        <div class="footer-note">
+            ⚡ the "NO" button is a bit shy... it runs! ⚡
+        </div>
+    </main>
 
-    setInterval(createBalloon, 800);
-</script>
+    <script>
+        (function() {
+            // get the moving button (NO), the panel container and the YES button
+            const noBtn = document.getElementById('noBtn');
+            const panel = document.getElementById('buttonPanel');
+            const yesBtn = document.getElementById('yesBtn');
+            const responseMsg = document.getElementById('responseMessage');
 
+            // variable to avoid overlapping too much
+            let moveAttempts = 0;
+
+            // function that moves the NO button to a random position within the panel
+            function moveNoButton() {
+                if (!noBtn || !panel) return;
+
+                // get panel dimensions and button dimensions
+                const panelRect = panel.getBoundingClientRect();
+                const btnRect = noBtn.getBoundingClientRect();
+
+                // button width/height including margin? we use offsetWidth/Height for total
+                const btnWidth = noBtn.offsetWidth;
+                const btnHeight = noBtn.offsetHeight;
+
+                // max left/top inside panel (stay fully visible)
+                // careful: panel padding is 0? we keep inside with some boundary
+                const maxLeft = panelRect.width - btnWidth - 5;   // 5px safe margin
+                const maxTop = panelRect.height - btnHeight - 5;
+
+                // ensure we don't go negative
+                if (maxLeft <= 0 || maxTop <= 0) {
+                    // panel might be too small, fallback to slight offset
+                    noBtn.style.transform = `translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px)`;
+                    return;
+                }
+
+                // random coordinates within panel, but keep away from YES button area a little? not necessary, but we do.
+                let newLeft = Math.random() * maxLeft;
+                let newTop = Math.random() * maxTop;
+
+                // but we also would like the button not to overlap YES too much, but not crucial.
+                // However we can add a small nudge if it gets too close to YES, but it's okay fun.
+
+                // apply position as relative offset? we use transform translate 
+                // because the button is already inside flex panel. using position relative could disturb flow.
+                // we use transform: translate(X,Y) relative to its original spot.
+                // The original spot is determined by flex. To make it move we set absolute positioning inside relative panel?
+                // Better make panel relative and button absolute? but would break flex layout.
+                // To keep flex layout but allow free movement, we make button absolutely positioned inside panel.
+                // Let's switch to absolute on the move, but then it will be removed from flex flow.
+                // We'll change the approach: set panel to relative, and button to absolute when moving.
+                // But first we set initial style; we'll apply css for moving.
+
+                // The easier method: apply "position: absolute" to the moving button, and set left/top relative to panel.
+                // But we also need to preserve its size. We'll change class dynamically.
+                // Let's do that:
+
+                // Ensure panel is relative (add style once)
+                if (window.getComputedStyle(panel).position !== 'relative') {
+                    panel.style.position = 'relative';
+                }
+
+                // set noBtn to absolute, but remove from flex flow gently.
+                noBtn.style.position = 'absolute';
+                noBtn.style.margin = '0';  // reset margin that flex adds
+                // set left and top based on new random within boundaries.
+                // but left and top are relative to panel. 
+                // we must keep button inside panel edges.
+                // recalc maxLeft/maxTop using panel inner width minus button width:
+                const panelW = panel.clientWidth;
+                const panelH = panel.clientHeight;
+                const btnW = noBtn.offsetWidth;
+                const btnH = noBtn.offsetHeight;
+
+                // safety caps:
+                const maxLeftAbs = Math.max(0, panelW - btnW - 8);
+                const maxTopAbs = Math.max(0, panelH - btnH - 8);
+
+                let finalLeft = Math.min(maxLeftAbs, Math.max(0, Math.random() * (panelW - btnW)));
+                let finalTop = Math.min(maxTopAbs, Math.max(0, Math.random() * (panelH - btnH)));
+
+                // apply left / top
+                noBtn.style.left = finalLeft + 'px';
+                noBtn.style.top = finalTop + 'px';
+
+                // ensure it's above other content
+                noBtn.style.zIndex = '30';
+
+                // increment move count
+                moveAttempts++;
+            }
+
+            // function that resets button to normal static (if needed, but we keep absolute for constant teasing)
+            // But we want it to move every time mouse approaches OR hovers, or even better: on hover and on attempt to click.
+            // We'll attach multiple events.
+
+            // Initially set panel to relative and button to absolute after a tiny delay? but first position somewhere nice.
+            // To avoid initial overlap, move once after loading.
+            window.addEventListener('load', function() {
+                // set panel to relative
+                panel.style.position = 'relative';
+                // set noBtn absolute, remove from flex
+                noBtn.style.position = 'absolute';
+                noBtn.style.margin = '0';
+                // set a nice starting position (right side, but not too far)
+                noBtn.style.left = (panel.clientWidth - noBtn.offsetWidth - 15) + 'px';
+                noBtn.style.top = '20px';  // some offset from top
+                noBtn.style.zIndex = '30';
+
+                // ensure yes button stays flex but no problem
+            });
+
+            // event: mouseenter on noBtn -> move away (flee)
+            noBtn.addEventListener('mouseenter', function(e) {
+                moveNoButton();
+            });
+
+            // also move on mousemove over the button? but might be too sensitive. We'll also move on click attempt.
+            noBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                moveNoButton();  // move again when clicked (so it never gets clicked)
+            });
+
+            // also move when mouse gets near? but we can also move on mouseover panel.
+            // but to be extra safe: when mouse moves inside panel, if it's too close to button, move.
+            // but simpler: move on any attempt to hover it (already mouseenter), plus a timer? maybe too aggressive.
+            // we also move on "mousemove" on panel if button is near cursor, but we'll keep it simple: run away on hover.
+
+            // we also move on any attempt to tab? but it's fine.
+
+            // YES button click reveals message and disables further moves? just shows message.
+            yesBtn.addEventListener('click', function() {
+                responseMsg.classList.add('show');
+                // also move no button far away to celebrate? maybe.
+                if (noBtn) {
+                    // hide no a little? but we just move it out of sight playfully
+                    noBtn.style.left = '200%'; // send it far right but still in panel (hidden)
+                }
+                // optional: disable further movement but it's ok.
+                // we can also make noBtn disappear? we keep it but inaccessible
+                noBtn.style.opacity = '0.3';
+                noBtn.style.pointerEvents = 'none'; // cannot interact
+                noBtn.style.transition = 'left 0.5s, opacity 0.5s';
+                // also maybe change text
+                noBtn.innerText = '💔 too late!';
+            });
+
+            // If someone tries to click on "NO" we already moved it via click, but add extra fallback
+            noBtn.addEventListener('click', function(e) {
+                // duplicate call but ensure move
+                moveNoButton();
+            }, true); // use capture to be safe
+
+            // additional: on mouseover panel (just for fun) sometimes move? but could be annoying, but we'll not overdo.
+            // But if user tries to catch it by moving mouse very fast, we can also move on mousemove within panel when button is near.
+            // Let's implement a simple distance check on mousemove (optional, adds to playfulness)
+            panel.addEventListener('mousemove', function(e) {
+                // if button is not visible or disabled, skip
+                if (noBtn.style.pointerEvents === 'none') return;
+
+                const btnRect = noBtn.getBoundingClientRect();
+                const mouseX = e.clientX;
+                const mouseY = e.clientY;
+
+                // calculate center of button
+                const btnCenterX = btnRect.left + btnRect.width / 2;
+                const btnCenterY = btnRect.top + btnRect.height / 2;
+
+                // distance in px
+                const dist = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
+
+                // if mouse within 130px, button moves (flees)
+                if (dist < 130) {
+                    moveNoButton();
+                }
+            });
+
+            // Throttle mousemove a little? but it's fine with quick move.
+
+            // also on touch for mobile
+            noBtn.addEventListener('touchstart', function(e) {
+                e.preventDefault();
+                moveNoButton();
+            });
+            panel.addEventListener('touchmove', function(e) {
+                // move if too close, similar logic
+                if (noBtn.style.pointerEvents === 'none') return;
+                if (e.touches.length > 0) {
+                    const touch = e.touches[0];
+                    const btnRect = noBtn.getBoundingClientRect();
+                    const touchX = touch.clientX;
+                    const touchY = touch.clientY;
+                    const btnCenterX = btnRect.left + btnRect.width/2;
+                    const btnCenterY = btnRect.top + btnRect.height/2;
+                    const dist = Math.hypot(touchX - btnCenterX, touchY - btnCenterY);
+                    if (dist < 140) {
+                        moveNoButton();
+                    }
+                }
+            });
+
+            // if window resizes, reposition button inside panel boundaries
+            window.addEventListener('resize', function() {
+                if (noBtn.style.pointerEvents !== 'none') {
+                    // ensure button inside new dimensions
+                    const panelW = panel.clientWidth;
+                    const panelH = panel.clientHeight;
+                    const btnW = noBtn.offsetWidth;
+                    const btnH = noBtn.offsetHeight;
+                    let currentLeft = parseFloat(noBtn.style.left) || 0;
+                    let currentTop = parseFloat(noBtn.style.top) || 0;
+                    const maxLeft = Math.max(0, panelW - btnW - 8);
+                    const maxTop = Math.max(0, panelH - btnH - 8);
+                    if (currentLeft > maxLeft) noBtn.style.left = maxLeft + 'px';
+                    if (currentTop > maxTop) noBtn.style.top = maxTop + 'px';
+                    if (currentLeft < 0) noBtn.style.left = '0px';
+                    if (currentTop < 0) noBtn.style.top = '0px';
+                }
+            });
+        })();
+    </script>
+
+    <!-- tiny extra inline tweak: ensures buttons are never overlapped by balloons due to z-index -->
+    <style>
+        .valentine-box, .btn { z-index: 25; position: relative; }
+        .btn-no { z-index: 35; }
+        #buttonPanel { position: relative; z-index: 40; }
+    </style>
 </body>
 </html>
